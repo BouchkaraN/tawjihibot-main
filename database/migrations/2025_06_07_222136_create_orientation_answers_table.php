@@ -14,7 +14,9 @@ return new class extends Migration
     Schema::create('orientation_answers', function (Blueprint $table) {
         $table->id();
         $table->foreignId('user_id')->constrained()->onDelete('cascade');
-        $table->json('answers'); // Stocke toutes les réponses du test
+        $table->longText('answers'); // Stocke toutes les réponses du test
+        # $table->longText('answers');
+
         $table->timestamps();
     });
 }

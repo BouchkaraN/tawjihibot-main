@@ -66,7 +66,8 @@ class ChatbotController extends Controller
             }
 
             // Définir le message système selon le contexte
-            $systemMessage = null;
+            // $systemMessage = null;
+            $systemMessage = "Tu es TawjihiBot, un assistant spécialisé en orientation scolaire et universitaire au Maroc. Tu aides les étudiants marocains à choisir leurs filières, écoles et carrières. Réponds toujours en français et dans le contexte du système éducatif marocain.";
 
             if (stripos($content, 'ecole') !== false) {
                 $systemMessage = "Tu es un expert en orientation scolaire au Maroc. Donne des conseils détaillés sur les écoles disponibles dans tous les domaines (scientifique, technique, professionnel, etc.).";
@@ -77,27 +78,32 @@ class ChatbotController extends Controller
             }
 
             // Préparer les messages pour l'API
-            $messages = [];
-            if ($systemMessage) {
-                $messages[] = ['role' => 'system', 'content' => $systemMessage];
-            }
-            $messages[] = ['role' => 'user', 'content' => $content];
+            // $messages = [];
+            // if ($systemMessage) {
+            //     $messages[] = ['role' => 'system', 'content' => $systemMessage];
+            // }
+            // $messages[] = ['role' => 'user', 'content' => $content];
 
+            $messages = [];
+            $messages[] = ['role' => 'user', 'content' => $systemMessage . "\n\nQuestion: " . $content];
             // Appel API OpenRouter
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . env('OPENROUTER_API_KEY'),
                 'Content-Type' => 'application/json',
             ])->post('https://openrouter.ai/api/v1/chat/completions',  [
-                # 'model' => env('OPENROUTER_MODEL', 'opengvlab/internvl3-14b:free'),
-                'model' => 'mistralai/mistral-7b-instruct:free',
+                 #'model' => env('OPENROUTER_MODEL', 'opengvlab/internvl3-14b:free'),
+                # 'model' => 'nousresearch/hermes-3-llama-3.1-405b:free',
+                'model' => 'google/gemma-3-4b-it:free',
+
                 #
                 'messages' => $messages,
                 'stream' => false,
             ]);
             
             # 
-            error_log('✅ Réponse brute API: ' . $response->body());
+            # error_log('✅ Réponse brute API: ' . $response->body());
             #
+            \Log::error('API Response: ' . $response->body());
             $data = $response->json();
 
             if (!isset($data['choices'][0]['message']['content'])) {

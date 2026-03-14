@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('orientation_results', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->json('result');
+            $table->longText('result');
             $table->timestamps();
         });
     }

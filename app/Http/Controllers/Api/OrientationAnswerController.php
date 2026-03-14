@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\Log;
 use App\Models\OrientationAnswer;
 use App\Models\OrientationResult;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class OrientationAnswerController extends Controller
 {
@@ -67,7 +65,10 @@ class OrientationAnswerController extends Controller
                 'Content-Type' => 'application/json',
             ])->timeout(60) // 60 secondes de timeout
             ->post('https://openrouter.ai/api/v1/chat/completions', [
-                'model' => 'meta-llama/llama-3-70b-instruct',
+                // 'model' => 'meta-llama/llama-3-70b-instruct',
+                // 'model' => 'meta-llama/llama-3.1-8b-instruct:free',
+                'model' => 'google/gemma-3-4b-it:free',
+
                 'messages' => [
                     [
                         'role' => 'system',
@@ -216,7 +217,7 @@ class OrientationAnswerController extends Controller
                 'HTTP-Referer' => 'https://votre-site.com',
                 'X-Title' => 'TawjihiBot',
             ])->post('https://openrouter.ai/api/v1/chat/completions', [
-                'model' => 'opengvlab/internvl3-14b:free',
+                'model' => 'google/gemma-3-4b-it:free',
                 'messages' => [
                     [
                         'role' => 'system',
